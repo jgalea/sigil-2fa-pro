@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# wp-env passes its argument as one exec token, so this keeps the command one word.
+exec ../sigil-2fa/vendor/bin/phpunit -c phpunit-multisite.xml.dist "$@"

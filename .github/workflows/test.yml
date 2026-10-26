@@ -1,0 +1,51 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Add-on suite
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The add-on needs the plugin it extends, and borrows its test runner.
+      # The folder name matters: Requires Plugins resolves by slug, and
+      # .wp-env.json mounts this checkout as sigil-2fa.
+      - name: Check out the plugin it extends
+        uses: actions/checkout@v4
+        with:
+          repository: jgalea/sigil-2fa
+          path: .free
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install the free plugin's test dependencies
+        working-directory: .free
+        run: composer install --no-interaction --no-progress
+
+      - name: Start WordPress
+        run: npx @wordpress/env start
+
+      - name: Add-on suite
+        run: |
+          npx @wordpress/env run tests-cli --env-cwd=wp-content/plugins/sigil-2fa-pro \
+            ../sigil-2fa/vendor/bin/phpunit
+
+      - name: Add-on suite, multisite
+        run: npx @wordpress/env run tests-cli --env-cwd=wp-content/plugins/sigil-2fa-pro tests/multisite
+
+      - name: Package builds and holds what it should
+        run: |
+          ./build.sh
+          unzip -l dist/sigil-2fa-pro.zip | grep -q ' sigil-2fa-pro/sigil-2fa-pro.php$'
