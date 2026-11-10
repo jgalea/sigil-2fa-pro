@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: Sigil Pro
+ * Plugin Name: Sigil – Passkeys and Two-Factor Authentication PRO
  * Description: Method policy, branding, settings portability, password-reset protection, destinations, sign-in bypass and audit history for Sigil two-factor authentication.
- * Version: 0.5.0
+ * Version: 0.5.1
  * Requires at least: 6.9
  * Requires PHP: 7.4
  * Requires Plugins: sigil-2fa
@@ -17,7 +17,7 @@ declare( strict_types=1 );
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SIGIL_PRO_VERSION', '0.5.0' );
+define( 'SIGIL_PRO_VERSION', '0.5.1' );
 define( 'SIGIL_PRO_FILE', __FILE__ );
 define( 'SIGIL_PRO_DIR', plugin_dir_path( __FILE__ ) );
 
